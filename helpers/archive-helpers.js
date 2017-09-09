@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require('http');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -55,10 +56,63 @@ exports.addUrlToList = function(url, callback) {
 };
 
 exports.isUrlArchived = function(url, callback) {
-  fs.existsSync(this.paths.archivedSites+url);
+  callback(fs.existsSync(this.paths.archivedSites+'/'+url));
 };
 
 exports.downloadUrls = function(urls) {
+
+  // for (var i = 0;i<urls.length;i++) {
+  //   console.log(urls[i]);
+  //   var file = fs.createWriteStream(this.paths.archivedSites + '/' + urls[i]);
+  //   var request = http.get('http://' + urls[i], function(response) {
+  //     response.pipe(file);
+  //     file.on('finish', function() {
+  //       file.close();  // close() is async, call cb after close completes.
+  //     });
+  //   });
+
+  var tasksToGo = urls.length;
+  urls.forEach((url) => {
+    var file = fs.createWriteStream(this.paths.archivedSites + '/' + urls[i]);
+    http.get('http://' + urls[i], function(response) {
+      response.pipe(file);
+      if (--tasksToGo === 0) {
+        response.end();
+      }
+    });
+  });
+    //
+    // keys.forEach(function(key) {
+    //         var query = config[key].query;
+    //         search(query, function(result) {
+    //             results.push(result);
+    //             if (--tasksToGo === 0) {
+    //                 // No tasks left, good to go
+    //                 onComplete();
+    //             }
+    //         });
+    //     });
+
+
+    // http.get('http://' + urls[i], (res) => {
+    //   let rawData = '';
+    //   res.on('data', (chunk) => {
+    //     rawData += chunk;
+    //     console.log('rawData: ', rawData)
+    //   });
+    //   res.on('end', () => {
+    //     console.log('rawData: ', rawData);
+    //     ////
+    //     v);
+    //     });
+    //     /////
+    //     fs.writeFile(this.paths.archivedSites+'/'+ urls[i], rawData, (err) => {
+    //       console.log('rawData: ', rawData);
+    //       console.log('path: ', this.paths.archivedSites+'/'+ urls[i]+'/index.html');
+    //     });
+    //   })
+    // });
+
 };
 
 
