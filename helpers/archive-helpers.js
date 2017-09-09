@@ -59,96 +59,24 @@ exports.isUrlArchived = function(url, callback) {
   callback(fs.existsSync(this.paths.archivedSites+'/'+url));
 };
 
+
 exports.downloadUrls = function(urls) {
-
-  // for (var i = 0;i<urls.length;i++) {
-  //   console.log(urls[i]);
-  //   var file = fs.createWriteStream(this.paths.archivedSites + '/' + urls[i]);
-  //   var request = http.get('http://' + urls[i], function(response) {
-  //     response.pipe(file);
-  //     file.on('finish', function() {
-  //       file.close();  // close() is async, call cb after close completes.
-  //     });
-  //   });
-
-  var tasksToGo = urls.length;
-  urls.forEach((url) => {
-    var file = fs.createWriteStream(this.paths.archivedSites + '/' + urls[i]);
-    http.get('http://' + urls[i], function(response) {
-      response.pipe(file);
-      if (--tasksToGo === 0) {
-        response.end();
-      }
+  urls.forEach(function(url) {
+    http.get('http://' + url, (res) => {
+      var data='';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        fs.writeFileSync(module.exports.paths.archivedSites+'/'+url, data);
+      });
     });
   });
-    //
-    // keys.forEach(function(key) {
-    //         var query = config[key].query;
-    //         search(query, function(result) {
-    //             results.push(result);
-    //             if (--tasksToGo === 0) {
-    //                 // No tasks left, good to go
-    //                 onComplete();
-    //             }
-    //         });
-    //     });
-
-
-    // http.get('http://' + urls[i], (res) => {
-    //   let rawData = '';
-    //   res.on('data', (chunk) => {
-    //     rawData += chunk;
-    //     console.log('rawData: ', rawData)
-    //   });
-    //   res.on('end', () => {
-    //     console.log('rawData: ', rawData);
-    //     ////
-    //     v);
-    //     });
-    //     /////
-    //     fs.writeFile(this.paths.archivedSites+'/'+ urls[i], rawData, (err) => {
-    //       console.log('rawData: ', rawData);
-    //       console.log('path: ', this.paths.archivedSites+'/'+ urls[i]+'/index.html');
-    //     });
-    //   })
-    // });
-
 };
 
 
-
-
-
-
-// exports.readListOfUrls = function(callback) {
-//   results = [];
-//
-//   fs.readFile(this.paths.list, (err, data) => {
-//     if (err) {
-//       throw err;
-//     }
-//     var results = data.split('\n');
-//     end(callback(results));
-//   });
-// };
-//
-// exports.isUrlInList = function(url, array) {
-//   for (var i = 0;i<array.length;i++) {
-//     if (url === array[i]) {
-//       return true;
-//     }
-//     return false;
-//     addUrlToList(url, );
-//   }
-// };
-//
-// exports.addUrlToList = function(url, callback) {
-//
-// };
-//
-// exports.isUrlArchived = function(url, callback) {
-// };
-//
-// exports.downloadUrls = function(urls) {
-// };
-//
+// for (var i = 0; i < urls.length; i++) {
+//   http.get('https://' + urls[i], (res) => {
+//     fs.writeFileSync(this.paths.archivedSites+'/'+urls[i], res);
+//   })
+// }
