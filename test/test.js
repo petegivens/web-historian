@@ -75,7 +75,6 @@ describe('server', function() {
     });
   });
 });
-
 describe('archive helpers', function() {
   describe('#readListOfUrls', function () {
     it('should read urls from sites.txt', function (done) {

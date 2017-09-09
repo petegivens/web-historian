@@ -13,12 +13,10 @@ var headers = {
 };
 
 exports.handleRequest = function (req, res) {
-  console.log('cwd.method: ', cwd +'/web/public/index.html');
 
   if (req.method === 'GET' && req.url === '/') {
     var statusCode = 200;
     fs.readFile(archive.paths.index, (err, data) => {
-      console.log('data is: ',data)
       if (err) {
         throw err;
       }

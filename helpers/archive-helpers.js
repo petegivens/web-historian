@@ -40,7 +40,6 @@ exports.readListOfUrls = function(callback) {
 };
 
 exports.isUrlInList = function(url, callback) {
-
   this.readListOfUrls((arr) => {
     for (var i = 0; i < arr.length; i++) {
       if (arr[i] === url) {
@@ -52,13 +51,11 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  this.readListOfUrls((arr) => {
-    arr.push(url);
-    callback();
-  });
+  fs.appendFile(this.paths.list, url+'\n', callback);
 };
 
 exports.isUrlArchived = function(url, callback) {
+  fs.existsSync(this.paths.archivedSites+url);
 };
 
 exports.downloadUrls = function(urls) {
