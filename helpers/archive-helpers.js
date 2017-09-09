@@ -42,7 +42,6 @@ exports.readListOfUrls = function(callback) {
 exports.isUrlInList = function(url, callback) {
 
   this.readListOfUrls((arr) => {
-    console.log('arr: ', arr);
     for (var i = 0; i < arr.length; i++) {
       if (arr[i] === url) {
         callback(true);
@@ -53,6 +52,10 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
+  this.readListOfUrls((arr) => {
+    arr.push(url);
+    callback();
+  });
 };
 
 exports.isUrlArchived = function(url, callback) {
